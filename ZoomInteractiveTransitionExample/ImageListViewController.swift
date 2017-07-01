@@ -10,4 +10,13 @@ import UIKit
 
 class ImageListViewController: UITableViewController {
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        let image = cell?.imageView?.image
+        let imageViewController = UIStoryboard(name: String(describing: ImageViewController.self), bundle: nil).instantiateInitialViewController() as! ImageViewController
+        imageViewController.image = image
+        
+        navigationController?.pushViewController(imageViewController, animated: true)
+    }
+    
 }

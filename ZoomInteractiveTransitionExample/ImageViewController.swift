@@ -10,6 +10,12 @@ import UIKit
 
 class ImageViewController: UIViewController {
     
-    @IBOutlet weak var imageView: UIImageView!
+    var image: UIImage?
+    
+    @IBOutlet weak var imageView: UIImageView! {
+        didSet {
+            imageView.image = image
+        }
+    }
     
 }
