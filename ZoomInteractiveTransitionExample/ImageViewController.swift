@@ -19,3 +19,23 @@ class ImageViewController: UIViewController {
     }
     
 }
+
+extension ImageViewController: ZoomAnimatedTransitioningDestinationDelegate {
+    
+    func zoomAnimatedTransitioningDestinationImageView() -> UIImageView {
+        return imageView
+    }
+    
+    func zoomAnimatedTransitioningDestinationImageViewFrame() -> CGRect {
+        return imageView.convert(imageView.bounds, to: view)
+    }
+    
+    func zoomAnimatedTransitioningDestinationWillBegin() {
+        imageView.isHidden = true
+    }
+    
+    func zoomAnimatedTransitioningDestinationDidEnd() {
+        imageView.isHidden = false
+    }
+    
+}

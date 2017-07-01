@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let imageListViewController = UIStoryboard(name: String(describing: ImageListViewController.self), bundle: nil).instantiateInitialViewController()!
-        window?.rootViewController = UINavigationController(rootViewController: imageListViewController)
+        window?.rootViewController = NavigationController(rootViewController: imageListViewController)
         
         return true
     }

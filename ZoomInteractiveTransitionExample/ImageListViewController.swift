@@ -10,13 +10,37 @@ import UIKit
 
 class ImageListViewController: UITableViewController {
     
+    var transitioningImageView: UIImageView?
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        let image = cell?.imageView?.image
+        let imageView = cell?.imageView
         let imageViewController = UIStoryboard(name: String(describing: ImageViewController.self), bundle: nil).instantiateInitialViewController() as! ImageViewController
-        imageViewController.image = image
+        imageViewController.image = imageView?.image
+        transitioningImageView = imageView
         
         navigationController?.pushViewController(imageViewController, animated: true)
+    }
+    
+}
+
+extension ImageListViewController: ZoomAnimatedTransitioningSourceDelegate {
+    
+    func zoomAnimatedTransitioningSourceImageView() -> UIImageView {
+        return transitioningImageView!
+    }
+    
+    func zoomAnimatedTransitioningSourceImageViewFrame() -> CGRect {
+        return transitioningImageView!.convert(transitioningImageView!.bounds, to: tableView.superview)
+        
+    }
+    
+    func zoomAnimatedTransitioningSourceWillBegin() {
+        transitioningImageView?.isHidden = true
+    }
+    
+    func zoomAnimatedTransitioningSourceDidEnd() {
+        transitioningImageView?.isHidden = false
     }
     
 }
