@@ -24,6 +24,8 @@
 		2BE7AD1F1F07D4E9007E14E9 /* IMG_2166.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 2BE7AD151F07D4E9007E14E9 /* IMG_2166.JPG */; };
 		2BE7AD201F07D4E9007E14E9 /* IMG_3408.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 2BE7AD161F07D4E9007E14E9 /* IMG_3408.JPG */; };
 		2BE7AD221F07DDC6007E14E9 /* ImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD211F07DDC6007E14E9 /* ImageListViewController.swift */; };
+		2BE7AD241F07DFE7007E14E9 /* ImageViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE7AD231F07DFE7007E14E9 /* ImageViewController.storyboard */; };
+		2BE7AD261F07E074007E14E9 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD251F07E074007E14E9 /* ImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		2BE7AD151F07D4E9007E14E9 /* IMG_2166.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG_2166.JPG; path = Images/IMG_2166.JPG; sourceTree = "<group>"; };
 		2BE7AD161F07D4E9007E14E9 /* IMG_3408.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG_3408.JPG; path = Images/IMG_3408.JPG; sourceTree = "<group>"; };
 		2BE7AD211F07DDC6007E14E9 /* ImageListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListViewController.swift; sourceTree = "<group>"; };
+		2BE7AD231F07DFE7007E14E9 /* ImageViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ImageViewController.storyboard; sourceTree = "<group>"; };
+		2BE7AD251F07E074007E14E9 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,8 @@
 				2BE7AD041F07CE3E007E14E9 /* Info.plist */,
 				2BE7AD0A1F07D425007E14E9 /* ImageListViewController.storyboard */,
 				2BE7AD211F07DDC6007E14E9 /* ImageListViewController.swift */,
+				2BE7AD231F07DFE7007E14E9 /* ImageViewController.storyboard */,
+				2BE7AD251F07E074007E14E9 /* ImageViewController.swift */,
 			);
 			path = ZoomInteractiveTransitionExample;
 			sourceTree = "<group>";
@@ -169,6 +175,7 @@
 			files = (
 				2BE7AD1B1F07D4E9007E14E9 /* IMG_1346.JPG in Resources */,
 				2BE7AD031F07CE3E007E14E9 /* LaunchScreen.storyboard in Resources */,
+				2BE7AD241F07DFE7007E14E9 /* ImageViewController.storyboard in Resources */,
 				2BE7AD201F07D4E9007E14E9 /* IMG_3408.JPG in Resources */,
 				2BE7AD1D1F07D4E9007E14E9 /* IMG_1844.JPG in Resources */,
 				2BE7AD1A1F07D4E9007E14E9 /* IMG_1333.JPG in Resources */,
@@ -193,6 +200,7 @@
 			files = (
 				2BE7AD221F07DDC6007E14E9 /* ImageListViewController.swift in Sources */,
 				2BE7ACFB1F07CE3E007E14E9 /* ViewController.swift in Sources */,
+				2BE7AD261F07E074007E14E9 /* ImageViewController.swift in Sources */,
 				2BE7ACF91F07CE3E007E14E9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
