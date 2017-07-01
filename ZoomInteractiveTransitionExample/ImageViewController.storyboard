@@ -30,19 +30,27 @@
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="f2X-LA-bjP" firstAttribute="leading" secondItem="wJE-9v-psb" secondAttribute="leading" id="2WX-Ul-eHz"/>
                             <constraint firstItem="f2X-LA-bjP" firstAttribute="top" secondItem="Pln-kb-3Fw" secondAttribute="bottom" id="Dda-09-0ZZ"/>
                             <constraint firstAttribute="trailing" secondItem="f2X-LA-bjP" secondAttribute="trailing" id="Et8-oo-W6Z"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="tB1-2s-D6r" appends="YES" id="Iho-e1-Mly"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="詳細" id="py3-bX-toy"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="imageView" destination="f2X-LA-bjP" id="ryh-P6-4GR"/>
+                        <outlet property="screenEdgePanGestureRecognizer" destination="tB1-2s-D6r" id="eBd-Ya-Ygo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gwN-hx-hRp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="tB1-2s-D6r">
+                    <rectEdge key="edges" left="YES"/>
+                </screenEdgePanGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="145" y="113"/>
         </scene>

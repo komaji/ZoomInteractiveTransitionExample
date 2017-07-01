@@ -26,6 +26,7 @@
 		2BE7AD261F07E074007E14E9 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD251F07E074007E14E9 /* ImageViewController.swift */; };
 		2BE7AD281F07E41F007E14E9 /* ZoomAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD271F07E41F007E14E9 /* ZoomAnimatedTransitioning.swift */; };
 		2BE7AD2A1F07F310007E14E9 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD291F07F310007E14E9 /* NavigationController.swift */; };
+		2BE7AD2C1F081B5D007E14E9 /* ZoomInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE7AD2B1F081B5D007E14E9 /* ZoomInteractiveTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		2BE7AD251F07E074007E14E9 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		2BE7AD271F07E41F007E14E9 /* ZoomAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		2BE7AD291F07F310007E14E9 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		2BE7AD2B1F081B5D007E14E9 /* ZoomInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomInteractiveTransition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				2BE7AD251F07E074007E14E9 /* ImageViewController.swift */,
 				2BE7AD271F07E41F007E14E9 /* ZoomAnimatedTransitioning.swift */,
 				2BE7AD291F07F310007E14E9 /* NavigationController.swift */,
+				2BE7AD2B1F081B5D007E14E9 /* ZoomInteractiveTransition.swift */,
 			);
 			path = ZoomInteractiveTransitionExample;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2BE7AD2A1F07F310007E14E9 /* NavigationController.swift in Sources */,
+				2BE7AD2C1F081B5D007E14E9 /* ZoomInteractiveTransition.swift in Sources */,
 				2BE7AD221F07DDC6007E14E9 /* ImageListViewController.swift in Sources */,
 				2BE7AD261F07E074007E14E9 /* ImageViewController.swift in Sources */,
 				2BE7ACF91F07CE3E007E14E9 /* AppDelegate.swift in Sources */,
