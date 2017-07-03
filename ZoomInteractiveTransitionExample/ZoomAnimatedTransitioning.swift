@@ -26,24 +26,16 @@ protocol ZoomAnimatedTransitioningDestinationDelegate: class {
     
 }
 
-protocol ZoomAnimatedTransitioningContextDelegate: class {
-    
-    func zoomAnimatedTransitioningContext(context: UIViewControllerContextTransitioning, operation: UINavigationControllerOperation)
-    
-}
-
 class ZoomAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
     
     fileprivate let operation: UINavigationControllerOperation
     fileprivate weak var sourceDelegate: ZoomAnimatedTransitioningSourceDelegate?
     fileprivate weak var destinationDelegate: ZoomAnimatedTransitioningDestinationDelegate?
-    fileprivate weak var contextDelegate: ZoomAnimatedTransitioningContextDelegate?
     
-    required init(operation: UINavigationControllerOperation, sourceDelegate: ZoomAnimatedTransitioningSourceDelegate, destinationDelegate: ZoomAnimatedTransitioningDestinationDelegate, contextDelegate: ZoomAnimatedTransitioningContextDelegate) {
+    required init(operation: UINavigationControllerOperation, sourceDelegate: ZoomAnimatedTransitioningSourceDelegate, destinationDelegate: ZoomAnimatedTransitioningDestinationDelegate) {
         self.operation = operation
         self.sourceDelegate = sourceDelegate
         self.destinationDelegate = destinationDelegate
-        self.contextDelegate = contextDelegate
         
         super.init()
     }
@@ -126,7 +118,6 @@ extension ZoomAnimatedTransitioning {
                 return
         }
         
-        contextDelegate?.zoomAnimatedTransitioningContext(context: transitionContext, operation: operation)
         
         let containerView = transitionContext.containerView
         containerView.backgroundColor = sourceView.backgroundColor

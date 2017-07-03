@@ -46,11 +46,7 @@ extension ImageViewController: ZoomInteractiveTransitionDelegate {
     func zoomInteractiveTransitionBegan() {
         (navigationController as! NavigationController).zoomInteractiveTransition = zoomInteractiveTransition
         _ = navigationController?.popViewController(animated: true)
-    }
-    
-    func zoomInteractiveTransitionFinish() {
-        // TODO: この時には zoomInteractiveTransition はすでに nil になっていたので正しいタイミングで nil にするようにする
-        (navigationController as? NavigationController)?.zoomInteractiveTransition = nil
+        (navigationController as! NavigationController).zoomInteractiveTransition = nil
     }
     
 }
