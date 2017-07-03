@@ -21,7 +21,7 @@ protocol ZoomAnimatedTransitioningDestinationDelegate: class {
     
     func zoomAnimatedTransitioningDestinationImageView() -> UIImageView
     func zoomAnimatedTransitioningDestinationImageViewFrame() -> CGRect
-    func zoomAnimatedTransitioningDestinationWillBegin()
+    func zoomAnimatedTransitioningDestinationWillBegin(context: UIViewControllerContextTransitioning)
     func zoomAnimatedTransitioningDestinationDidEnd()
     
 }
@@ -52,7 +52,7 @@ class ZoomAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3
+        return 3.3
     }
     
 }
@@ -84,7 +84,7 @@ extension ZoomAnimatedTransitioning {
         containerView.addSubview(transitioningImageView)
         
         sourceDelegate.zoomAnimatedTransitioningSourceWillBegin()
-        destinationDelegate?.zoomAnimatedTransitioningDestinationWillBegin()
+        destinationDelegate?.zoomAnimatedTransitioningDestinationWillBegin(context: transitionContext)
         
         UIView.animate(
             withDuration: transitionDuration(using: transitionContext),
@@ -134,7 +134,7 @@ extension ZoomAnimatedTransitioning {
         containerView.addSubview(transitioningImageView)
         
         sourceDelegate?.zoomAnimatedTransitioningSourceWillBegin()
-        destinationDelegate.zoomAnimatedTransitioningDestinationWillBegin()
+        destinationDelegate.zoomAnimatedTransitioningDestinationWillBegin(context: transitionContext)
         
         if transitioningImageView.frame.maxY.isLess(than: 0.0) {
             transitioningImageView.frame.origin.y = -transitioningImageView.frame.height
