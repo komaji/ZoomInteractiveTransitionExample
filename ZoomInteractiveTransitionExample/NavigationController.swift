@@ -10,7 +10,8 @@ import UIKit
 
 class NavigationController: UINavigationController {
     
-    var zoomInteractiveTransition: ZoomInteractiveTransition?
+//    var zoomInteractiveTransition: ZoomInteractiveTransition?
+    var zoomAnimatedInteractiveTransition: ZoomAnimatedInteractiveTransition?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -40,8 +41,15 @@ extension NavigationController: UINavigationControllerDelegate {
         return nil
     }
     
-    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return zoomInteractiveTransition
-    }
+//    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+//        return zoomInteractiveTransition
+//    }
     
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard let zoomAnimatedInteractiveTransition = zoomAnimatedInteractiveTransition else {
+            return nil
+        }
+        
+        return zoomAnimatedInteractiveTransition.isInteractive ? zoomAnimatedInteractiveTransition : nil
+    }
 }
