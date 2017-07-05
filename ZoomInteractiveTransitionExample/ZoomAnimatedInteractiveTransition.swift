@@ -26,7 +26,6 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
     var transitioningImageView: UIImageView?
     var percentComplete: CGFloat = 0.0
     var transitionDuration: TimeInterval = 0.0
-    var completionSpeed: CGFloat = 0.7
     
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
@@ -114,7 +113,7 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         }
         
         // アニメーション時間の計算
-        let duration = transitionDuration + TimeInterval((1.0 - percentComplete) / completionSpeed)
+        let duration = transitionDuration * TimeInterval(1.0 - percentComplete)
         
         // インタラクティブ画面遷移終了
         transitionContext.finishInteractiveTransition()
@@ -122,6 +121,8 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         // 残りのアニメーションを実行
         UIView.animate(
             withDuration: duration,
+            delay: 0.0,
+            options: .curveEaseOut,
             animations: { [weak self] in
                 guard let sourceDelegate = self?.sourceDelegate else { return }
                 
@@ -152,7 +153,7 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         }
         
         // アニメーション時間の計算
-        let duration = transitionDuration * TimeInterval(percentComplete / completionSpeed)
+        let duration = transitionDuration * TimeInterval(percentComplete)
         
         // インタラクティブ画面遷移キャンセル
         transitionContext.cancelInteractiveTransition()
@@ -160,6 +161,8 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         // キャンセル時のアニメーションを実行
         UIView.animate(
             withDuration: duration,
+            delay: 0.0,
+            options: .curveEaseOut,
             animations: { [weak self] in
                 guard let destinationDelegate = self?.destinationDelegate else { return }
                 
@@ -190,8 +193,11 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         case .cancelled:
             break
         case .ended:
+            guard let view = view else { return }
+            
             let velocity = gesture.velocity(in: view)
-            if velocity.x <= 0 {
+            let progress = gesture.translation(in: view).x / view.bounds.width
+            if progress.isLess(than: 0.2) && velocity.x.isLess(than: 1000) {
                 cancelInteractiveTransition()
             } else {
                 finishInteractiveTransition(withVelocity: velocity)
