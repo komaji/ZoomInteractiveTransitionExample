@@ -11,7 +11,6 @@ import UIKit
 class ImageViewController: UIViewController {
     
     var image: UIImage?
-    let zoomAnimatedInteractiveTransition = ZoomAnimatedInteractiveTransition()
     
     @IBOutlet weak var imageView: UIImageView! {
         didSet {
@@ -22,21 +21,16 @@ class ImageViewController: UIViewController {
     @IBOutlet var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer! {
         didSet {
             screenEdgePanGestureRecognizer.delegate = self
-            screenEdgePanGestureRecognizer.addTarget(zoomAnimatedInteractiveTransition, action: #selector(zoomAnimatedInteractiveTransition.handle(gesture:)))
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        zoomAnimatedInteractiveTransition.delegate = self
-        (navigationController as? NavigationController)?.zoomAnimatedInteractiveTransition = zoomAnimatedInteractiveTransition
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         
-        (navigationController as? NavigationController)?.zoomAnimatedInteractiveTransition = nil
+        if let zoomAnimatedInteractiveTransition = (navigationController as? NavigationController)?.zoomAnimatedInteractiveTransition {
+            zoomAnimatedInteractiveTransition.delegate = self
+            screenEdgePanGestureRecognizer.addTarget(zoomAnimatedInteractiveTransition, action: #selector(zoomAnimatedInteractiveTransition.handle(gesture:)))
+        }
     }
     
 }
