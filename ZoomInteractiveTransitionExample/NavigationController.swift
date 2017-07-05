@@ -32,10 +32,14 @@ class NavigationController: UINavigationController {
 extension NavigationController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if let fromVC = fromVC as? ZoomAnimatedTransitioningSourceDelegate, let toVC = toVC as? ZoomAnimatedTransitioningDestinationDelegate, operation == .push {
-            return ZoomAnimatedTransitioning(operation: operation, sourceDelegate: fromVC, destinationDelegate: toVC)
-        } else if let toVC = toVC as? ZoomAnimatedTransitioningSourceDelegate, let fromVC = fromVC as? ZoomAnimatedTransitioningDestinationDelegate, operation == .pop {
-            return ZoomAnimatedTransitioning(operation: operation, sourceDelegate: toVC, destinationDelegate: fromVC)
+        if fromVC is ZoomAnimatedTransitioningSourceDelegate
+            && toVC is ZoomAnimatedTransitioningDestinationDelegate
+            && operation == .push {
+            return ZoomAnimatedTransitioning(operation: operation)
+        } else if toVC is ZoomAnimatedTransitioningSourceDelegate
+            && fromVC is ZoomAnimatedTransitioningDestinationDelegate
+            && operation == .pop {
+            return ZoomAnimatedTransitioning(operation: operation)
         }
         
         return nil
