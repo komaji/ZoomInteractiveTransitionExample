@@ -68,10 +68,10 @@ extension ZoomAnimatedTransitioning {
         sourceView.alpha = 1.0
         destinationView.alpha = 0.0
         
-        let transitioningImageView = UIImageView()
-        transitioningImageView.image = sourceDelegate.zoomAnimatedTransitioningSourceImageView().image
-        transitioningImageView.frame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
-        transitioningImageView.contentMode = sourceDelegate.zoomAnimatedTransitioningSourceImageView().contentMode
+        let transitioningImageView = createImageView(
+            from: sourceDelegate.zoomAnimatedTransitioningSourceImageView(),
+            frame: sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
+        )
         
         containerView.insertSubview(destinationView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
@@ -115,10 +115,10 @@ extension ZoomAnimatedTransitioning {
         sourceView.alpha = 0.0
         destinationView.alpha = 1.0
         
-        let transitioningImageView = UIImageView()
-        transitioningImageView.image = destinationDelegate.zoomAnimatedTransitioningDestinationImageView().image
-        transitioningImageView.frame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
-        transitioningImageView.contentMode = destinationDelegate.zoomAnimatedTransitioningDestinationImageView().contentMode
+        let transitioningImageView = createImageView(
+            from: destinationDelegate.zoomAnimatedTransitioningDestinationImageView(),
+            frame: destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
+        )
         
         containerView.insertSubview(sourceView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
@@ -163,6 +163,15 @@ extension ZoomAnimatedTransitioning {
                 completion: { _ in completion() }
             )
         }
+    }
+    
+    func createImageView(from resourceimageView: UIImageView, frame: CGRect) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.image = resourceimageView.image
+        imageView.frame = frame
+        imageView.contentMode = resourceimageView.contentMode
+        
+        return imageView
     }
     
 }
