@@ -17,51 +17,89 @@ protocol ZoomAnimatedInteractiveTransitionDelegate: class {
 class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTransitioning {
     
     weak var delegate: ZoomAnimatedInteractiveTransitionDelegate?
+    weak var sourceDelegate: ZoomAnimatedTransitioningSourceDelegate?
+    weak var destinationDelegate: ZoomAnimatedTransitioningDestinationDelegate?
+    
     var view: UIView?
     var isInteractive = false
     var transitionContext: UIViewControllerContextTransitioning?
+    var transitioningImageView: UIImageView?
     var percentComplete: CGFloat = 0.0
     var transitionDuration: TimeInterval = 0.0
+    var completionSpeed: CGFloat = 0.7
     
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
         
-        guard let fromVC = transitionContext.viewController(forKey: .from),
-            let toVC = transitionContext.viewController(forKey: .to) else {
+        guard let sourceView = transitionContext.view(forKey: .to),
+            let destinationView = transitionContext.view(forKey: .from),
+            let destinationDelegate = destinationDelegate else {
                 return
         }
         
-        let containerView = transitionContext.containerView
-        containerView.insertSubview(toVC.view, belowSubview: fromVC.view)
         
-        guard let transitionCoordinator = fromVC.transitionCoordinator else {
-            return
+        let containerView = transitionContext.containerView
+        containerView.backgroundColor = sourceView.backgroundColor
+        
+        sourceView.alpha = 0.0
+        destinationView.alpha = 1.0
+        
+        let transitioningImageView = UIImageView()
+        transitioningImageView.image = destinationDelegate.zoomAnimatedTransitioningDestinationImageView().image
+        transitioningImageView.frame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
+        transitioningImageView.contentMode = destinationDelegate.zoomAnimatedTransitioningDestinationImageView().contentMode
+        self.transitioningImageView = transitioningImageView
+        
+        containerView.insertSubview(sourceView, belowSubview: sourceView)
+        containerView.addSubview(transitioningImageView)
+        
+        sourceDelegate?.zoomAnimatedTransitioningSourceWillBegin()
+        destinationDelegate.zoomAnimatedTransitioningDestinationWillBegin(context: transitionContext)
+        
+        if transitioningImageView.frame.maxY.isLess(than: 0.0) {
+            transitioningImageView.frame.origin.y = -transitioningImageView.frame.height
         }
         
+        guard let fromVC = transitionContext.viewController(forKey: .from),
+            let transitionCoordinator = fromVC.transitionCoordinator else {
+            return
+        }
+
         transitionDuration = transitionCoordinator.transitionDuration
     }
-    
-    var completionSpeed: CGFloat = 1.0
     
     func updateInteractiveTransition(withTranslation translation: CGPoint) {
         guard let transitionContext = transitionContext else {
             return
         }
-        
-        guard let fromVC = transitionContext.viewController(forKey: .from) else {
-            return
+    
+        guard let sourceView = transitionContext.view(forKey: .to),
+            let destinationView = transitionContext.view(forKey: .from),
+            let transitioningImageView = transitioningImageView,
+            let sourceDelegate = sourceDelegate,
+            let destinationDelegate = destinationDelegate else {
+                return
         }
         
-        var frame = fromVC.view.frame
-        frame.origin.x = translation.x
-        frame.origin.y = translation.y
-        fromVC.view.frame = frame
+        sourceView.alpha = (1.0 * percentComplete)
+        destinationView.alpha = 1.0 - (1.0 * percentComplete)
         
-        if frame.origin.x < 0 {
-            percentComplete = 0.0
-        } else {
-            percentComplete = frame.origin.x / frame.size.width
-        }
+        let sourceImageViewFrame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
+        let destinationImageViewFrame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
+        
+        let dx = sourceImageViewFrame.origin.x - destinationImageViewFrame.origin.x
+        let dy = sourceImageViewFrame.origin.y - destinationImageViewFrame.origin.y
+        let dw = sourceImageViewFrame.width - destinationImageViewFrame.width
+        let dh = sourceImageViewFrame.height - destinationImageViewFrame.height
+        
+        transitioningImageView.frame = CGRect(
+            x: destinationImageViewFrame.minX + dx * percentComplete,
+            y: destinationImageViewFrame.minY + dy * percentComplete,
+            width: destinationImageViewFrame.width + dw * percentComplete,
+            height: destinationImageViewFrame.height + dh * percentComplete
+        )
+        
+        percentComplete = translation.x / sourceView.bounds.width
     }
     
     func finishInteractiveTransition(withVelocity velocity: CGPoint) {
@@ -69,29 +107,10 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
             return
         }
         
-        guard let fromVC = transitionContext.viewController(forKey: .from) else {
-            return
-        }
-        
-        let frame = fromVC.view.frame
-        var finalFrame = frame
-        let width = frame.size.width
-        let height = frame.size.height
-        let dx = width - frame.origin.x
-        let dy: CGFloat
-        
-        if velocity.y < 0 {
-            dy = -(height + frame.origin.y)
-        } else {
-            dy = height - frame.origin.y
-        }
-        
-        if velocity.y.isZero || fabsf(Float(dx / dy)) < fabsf(Float(velocity.x / velocity.y)) { // 右に消える
-            finalFrame.origin.x = width
-            finalFrame.origin.y += dx * velocity.y / velocity.x
-        } else { // 上または下に消える
-            finalFrame.origin.x += dy * velocity.x / velocity.y
-            finalFrame.origin.y = velocity.y < 0 ? -height : height
+        guard let sourceView = transitionContext.view(forKey: .to),
+            let destinationView = transitionContext.view(forKey: .from),
+            let transitioningImageView = transitioningImageView else {
+                return
         }
         
         // アニメーション時間の計算
@@ -103,10 +122,19 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         // 残りのアニメーションを実行
         UIView.animate(
             withDuration: duration,
-            animations: {
-              fromVC.view.frame = finalFrame
+            animations: { [weak self] in
+                guard let sourceDelegate = self?.sourceDelegate else { return }
+                
+                sourceView.alpha = 1.0
+                destinationView.alpha = 0.0
+                transitioningImageView.frame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
             },
-            completion: { _ in
+            completion: { [weak self] _ in
+                self?.sourceDelegate?.zoomAnimatedTransitioningSourceDidEnd()
+                self?.destinationDelegate?.zoomAnimatedTransitioningDestinationDidEnd()
+                
+                transitioningImageView.removeFromSuperview()
+                
                 transitionContext.completeTransition(true)
             }
         )
@@ -117,13 +145,11 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
             return
         }
         
-        
-        guard let fromVC = transitionContext.viewController(forKey: .from) else {
-            return
+        guard let sourceView = transitionContext.view(forKey: .to),
+            let destinationView = transitionContext.view(forKey: .from),
+            let transitioningImageView = transitioningImageView else {
+                return
         }
-        
-        
-        let frame = transitionContext.initialFrame(for: fromVC)
         
         // アニメーション時間の計算
         let duration = transitionDuration * TimeInterval(percentComplete / completionSpeed)
@@ -134,10 +160,19 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         // キャンセル時のアニメーションを実行
         UIView.animate(
             withDuration: duration,
-            animations: {
-                fromVC.view.frame = frame
+            animations: { [weak self] in
+                guard let destinationDelegate = self?.destinationDelegate else { return }
+                
+                sourceView.alpha = 0.0
+                destinationView.alpha = 1.0
+                transitioningImageView.frame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
             },
-            completion: { _ in
+            completion: { [weak self] _ in
+                self?.sourceDelegate?.zoomAnimatedTransitioningSourceDidEnd()
+                self?.destinationDelegate?.zoomAnimatedTransitioningDestinationDidEnd()
+                
+                transitioningImageView.removeFromSuperview()
+                
                 transitionContext.completeTransition(false)
             }
         )
