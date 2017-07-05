@@ -18,23 +18,18 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
     
     weak var delegate: ZoomAnimatedInteractiveTransitionDelegate?
     
-    var view: UIView?
     var isInteractive = false
     var transitionContext: UIViewControllerContextTransitioning?
     var transitioningImageView: UIImageView?
     var progress: CGFloat = 0.0
-    var transitionDuration: TimeInterval = 0.0
     
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         guard let sourceView = transitionContext.view(forKey: .to),
             let destinationView = transitionContext.view(forKey: .from),
             let sourceDelegate = transitionContext.viewController(forKey: .to) as? ZoomAnimatedTransitioningSourceDelegate,
-            let destinationDelegate = transitionContext.viewController(forKey: .from) as? ZoomAnimatedTransitioningDestinationDelegate,
-            let transitionCoordinator = transitionContext.viewController(forKey: .from)?.transitionCoordinator else {
+            let destinationDelegate = transitionContext.viewController(forKey: .from) as? ZoomAnimatedTransitioningDestinationDelegate else {
                 return
         }
-        
-        transitionDuration = transitionCoordinator.transitionDuration
         
         let containerView = transitionContext.containerView
         containerView.backgroundColor = sourceView.backgroundColor
@@ -93,12 +88,13 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
     }
     
     func finishInteractiveTransition(withVelocity velocity: CGPoint) {
-        guard let transitionContext = transitionContext else {
+        guard let transitionContext = transitionContext,
+            let transitionCoordinator = transitionContext.viewController(forKey: .to)?.transitionCoordinator else {
             return
         }
         
         // アニメーション時間の計算
-        let duration = transitionDuration * TimeInterval(1.0 - progress)
+        let duration = transitionCoordinator.transitionDuration * TimeInterval(1.0 - progress)
         
         // インタラクティブ画面遷移終了
         transitionContext.finishInteractiveTransition()
@@ -140,12 +136,13 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
     }
     
     func cancelInteractiveTransition() {
-        guard let transitionContext = transitionContext else {
+        guard let transitionContext = transitionContext,
+            let transitionCoordinator = transitionContext.viewController(forKey: .to)?.transitionCoordinator else {
                 return
         }
         
         // アニメーション時間の計算
-        let duration = transitionDuration * TimeInterval(progress)
+        let duration = transitionCoordinator.transitionDuration * TimeInterval(progress)
         
         // インタラクティブ画面遷移キャンセル
         transitionContext.cancelInteractiveTransition()
@@ -189,24 +186,36 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
     func handle(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
-            let point = gesture.location(in: view)
+            guard let view = gesture.view else {
+                return
+            }
+            
             isInteractive = true
+            let point = gesture.location(in: view)
             delegate?.zoomAnimatedInteractiveTransitionBegan(at: point)
         case .changed:
+            guard let view = gesture.view else {
+                return
+            }
+            
             let translation = gesture.translation(in: view)
             updateInteractiveTransition(withTranslation: translation)
         case .cancelled:
             break
         case .ended:
-            guard let view = view else { return }
+            guard let view = gesture.view else {
+                return
+            }
             
             let velocity = gesture.velocity(in: view)
             let progress = gesture.translation(in: view).x / view.bounds.width
+            
             if progress.isLess(than: 0.2) && velocity.x.isLess(than: 1000) {
                 cancelInteractiveTransition()
             } else {
                 finishInteractiveTransition(withVelocity: velocity)
             }
+            
             isInteractive = false
         default:
             break

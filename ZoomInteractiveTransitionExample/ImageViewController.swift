@@ -32,8 +32,7 @@ class ImageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        zoomAnimatedInteractiveTransition.view = view
+
         zoomAnimatedInteractiveTransition.delegate = self
         (navigationController as? NavigationController)?.zoomAnimatedInteractiveTransition = zoomAnimatedInteractiveTransition
     }
