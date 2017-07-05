@@ -74,8 +74,8 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
         let sourceImageViewFrame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
         let destinationImageViewFrame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
         
-        let dx = sourceImageViewFrame.origin.x - destinationImageViewFrame.origin.x
-        let dy = sourceImageViewFrame.origin.y - destinationImageViewFrame.origin.y
+        let dx = sourceImageViewFrame.minX - destinationImageViewFrame.minX
+        let dy = sourceImageViewFrame.minY - destinationImageViewFrame.minY
         let dw = sourceImageViewFrame.width - destinationImageViewFrame.width
         let dh = sourceImageViewFrame.height - destinationImageViewFrame.height
         
@@ -93,13 +93,10 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
             return
         }
         
-        // アニメーション時間の計算
         let duration = transitionCoordinator.transitionDuration * TimeInterval(1.0 - progress)
         
-        // インタラクティブ画面遷移終了
         transitionContext.finishInteractiveTransition()
         
-        // 残りのアニメーションを実行
         UIView.animate(
             withDuration: duration,
             delay: 0.0,
@@ -141,13 +138,10 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
                 return
         }
         
-        // アニメーション時間の計算
         let duration = transitionCoordinator.transitionDuration * TimeInterval(progress)
         
-        // インタラクティブ画面遷移キャンセル
         transitionContext.cancelInteractiveTransition()
         
-        // キャンセル時のアニメーションを実行
         UIView.animate(
             withDuration: duration,
             delay: 0.0,
@@ -175,7 +169,6 @@ class ZoomAnimatedInteractiveTransition: NSObject, UIViewControllerInteractiveTr
                 
                 sourceDelegate.zoomAnimatedTransitioningSourceImageView().isHidden = false
                 destinationDelegate.zoomAnimatedTransitioningDestinationImageView().isHidden = false
-                
                 transitioningImageView.removeFromSuperview()
                 
                 transitionContext.completeTransition(false)
