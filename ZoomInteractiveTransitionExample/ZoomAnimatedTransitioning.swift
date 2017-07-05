@@ -62,9 +62,6 @@ extension ZoomAnimatedTransitioning {
                 return
         }
         
-        let containerView = transitionContext.containerView
-        containerView.backgroundColor = sourceView.backgroundColor
-        
         sourceView.alpha = 1.0
         destinationView.alpha = 0.0
         
@@ -73,6 +70,8 @@ extension ZoomAnimatedTransitioning {
             frame: sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
         )
         
+        let containerView = transitionContext.containerView
+        containerView.backgroundColor = sourceView.backgroundColor
         containerView.insertSubview(destinationView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
         
@@ -108,10 +107,6 @@ extension ZoomAnimatedTransitioning {
                 return
         }
         
-        
-        let containerView = transitionContext.containerView
-        containerView.backgroundColor = sourceView.backgroundColor
-        
         sourceView.alpha = 0.0
         destinationView.alpha = 1.0
         
@@ -120,6 +115,8 @@ extension ZoomAnimatedTransitioning {
             frame: destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
         )
         
+        let containerView = transitionContext.containerView
+        containerView.backgroundColor = sourceView.backgroundColor
         containerView.insertSubview(sourceView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
         
