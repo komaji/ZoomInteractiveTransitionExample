@@ -142,28 +142,43 @@ extension ZoomAnimatedTransitioning {
             transitioningImageView.frame.origin.y = -transitioningImageView.frame.height
         }
         
-        UIView.animate(
-            withDuration: transitionDuration(using: transitionContext),
-            delay: 0.0,
-            options: .curveEaseOut,
-            animations: { [weak self] in
-                guard let sourceDelegate = self?.sourceDelegate else { return }
-                
-                sourceView.alpha = 1.0
-                destinationView.alpha = 0.0
-                transitioningImageView.frame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
-            },
-            completion: { [weak self] _ in
-                guard let sourceDelegate = self?.sourceDelegate else { return }
-                
-                transitioningImageView.removeFromSuperview()
-                
-                sourceDelegate.zoomAnimatedTransitioningSourceDidEnd()
-                destinationDelegate.zoomAnimatedTransitioningDestinationDidEnd()
-                
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-            }
-        )
+        let animations = { [weak self] in
+            guard let sourceDelegate = self?.sourceDelegate else { return }
+            
+            sourceView.alpha = 1.0
+            destinationView.alpha = 0.0
+            transitioningImageView.frame = sourceDelegate.zoomAnimatedTransitioningSourceImageViewFrame()
+        }
+        
+        let completion = { [weak self] in
+            guard let sourceDelegate = self?.sourceDelegate else { return }
+            
+            transitioningImageView.removeFromSuperview()
+            
+            sourceDelegate.zoomAnimatedTransitioningSourceDidEnd()
+            destinationDelegate.zoomAnimatedTransitioningDestinationDidEnd()
+            
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        }
+        
+        if #available(iOS 10.0, *) {
+            let animator = UIViewPropertyAnimator(
+                duration: transitionDuration(using: transitionContext),
+                curve: .easeOut,
+                animations: animations
+            )
+            animator.addCompletion { _ in completion() }
+            
+            animator.startAnimation()
+        } else {
+            UIView.animate(
+                withDuration: transitionDuration(using: transitionContext),
+                delay: 0.0,
+                options: .curveEaseOut,
+                animations: animations,
+                completion: { _ in completion() }
+            )
+        }
     }
     
 }

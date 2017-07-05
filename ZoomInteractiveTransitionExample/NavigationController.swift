@@ -10,7 +10,8 @@ import UIKit
 
 class NavigationController: UINavigationController {
     
-    var zoomAnimatedInteractiveTransition = ZoomAnimatedInteractiveTransition()
+//    var zoomAnimatedInteractiveTransition = ZoomAnimatedInteractiveTransition()
+    var zoomAnimatedInteractiveTransition = ZoomPercentDrivenInteractiveTransition()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
