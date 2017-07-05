@@ -37,8 +37,6 @@ class ZoomAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning
         case .push:
             pushAnimateTransition(using: transitionContext)
         case .pop:
-            // エッジスワイプの時は ZoomAnimatedInteractiveTransition の方で
-            // アニメーション処理も行うのでこのメソッドは呼ばれない
             popAnimateTransition(using: transitionContext)
         default:
             return
