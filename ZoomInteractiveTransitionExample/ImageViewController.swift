@@ -57,14 +57,6 @@ extension ImageViewController: ZoomAnimatedTransitioningDestinationDelegate {
         return imageView.convert(imageView.bounds, to: view)
     }
     
-    func zoomAnimatedTransitioningDestinationWillBegin(context: UIViewControllerContextTransitioning) {
-        imageView.isHidden = true
-    }
-    
-    func zoomAnimatedTransitioningDestinationDidEnd() {
-        imageView.isHidden = false
-    }
-    
 }
 
 extension ImageViewController: ZoomAnimatedInteractiveTransitionDelegate {

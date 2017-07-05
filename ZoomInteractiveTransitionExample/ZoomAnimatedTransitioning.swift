@@ -12,8 +12,6 @@ protocol ZoomAnimatedTransitioningSourceDelegate: class {
     
     func zoomAnimatedTransitioningSourceImageView() -> UIImageView
     func zoomAnimatedTransitioningSourceImageViewFrame() -> CGRect
-    func zoomAnimatedTransitioningSourceWillBegin()
-    func zoomAnimatedTransitioningSourceDidEnd()
 
 }
 
@@ -21,8 +19,6 @@ protocol ZoomAnimatedTransitioningDestinationDelegate: class {
     
     func zoomAnimatedTransitioningDestinationImageView() -> UIImageView
     func zoomAnimatedTransitioningDestinationImageViewFrame() -> CGRect
-    func zoomAnimatedTransitioningDestinationWillBegin(context: UIViewControllerContextTransitioning)
-    func zoomAnimatedTransitioningDestinationDidEnd()
     
 }
 
@@ -64,8 +60,9 @@ extension ZoomAnimatedTransitioning {
     
     func pushAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let sourceView = transitionContext.view(forKey: .from),
+            let sourceDelegate = sourceDelegate,
             let destinationView = transitionContext.view(forKey: .to),
-            let sourceDelegate = sourceDelegate else {
+            let destinationDelegate = destinationDelegate else {
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 
                 return
@@ -85,8 +82,8 @@ extension ZoomAnimatedTransitioning {
         containerView.insertSubview(destinationView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
         
-        sourceDelegate.zoomAnimatedTransitioningSourceWillBegin()
-        destinationDelegate?.zoomAnimatedTransitioningDestinationWillBegin(context: transitionContext)
+        sourceDelegate.zoomAnimatedTransitioningSourceImageView().isHidden = true
+        destinationDelegate.zoomAnimatedTransitioningDestinationImageView().isHidden = true
         
         UIView.animate(
             withDuration: transitionDuration(using: transitionContext),
@@ -100,12 +97,13 @@ extension ZoomAnimatedTransitioning {
                 transitioningImageView.frame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
             },
             completion: { [weak self] _ in
-                guard let destinationDelegate = self?.destinationDelegate else { return }
+                guard let sourceDelegate = self?.sourceDelegate,
+                    let destinationDelegate = self?.destinationDelegate else { return }
                 
                 transitioningImageView.removeFromSuperview()
                 
-                sourceDelegate.zoomAnimatedTransitioningSourceDidEnd()
-                destinationDelegate.zoomAnimatedTransitioningDestinationDidEnd()
+                sourceDelegate.zoomAnimatedTransitioningSourceImageView().isHidden = false
+                destinationDelegate.zoomAnimatedTransitioningDestinationImageView().isHidden = false
 
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             }
@@ -114,6 +112,7 @@ extension ZoomAnimatedTransitioning {
     
     func popAnimateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let sourceView = transitionContext.view(forKey: .to),
+            let sourceDelegate = sourceDelegate,
             let destinationView = transitionContext.view(forKey: .from),
             let destinationDelegate = destinationDelegate else {
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
@@ -135,8 +134,8 @@ extension ZoomAnimatedTransitioning {
         containerView.insertSubview(sourceView, belowSubview: sourceView)
         containerView.addSubview(transitioningImageView)
         
-        sourceDelegate?.zoomAnimatedTransitioningSourceWillBegin()
-        destinationDelegate.zoomAnimatedTransitioningDestinationWillBegin(context: transitionContext)
+        sourceDelegate.zoomAnimatedTransitioningSourceImageView().isHidden = true
+        destinationDelegate.zoomAnimatedTransitioningDestinationImageView().isHidden = true
         
         if transitioningImageView.frame.maxY.isLess(than: 0.0) {
             transitioningImageView.frame.origin.y = -transitioningImageView.frame.height
@@ -151,12 +150,13 @@ extension ZoomAnimatedTransitioning {
         }
         
         let completion = { [weak self] in
-            guard let sourceDelegate = self?.sourceDelegate else { return }
+            guard let sourceDelegate = self?.sourceDelegate,
+                let destinationDelegate = self?.destinationDelegate else { return }
             
             transitioningImageView.removeFromSuperview()
             
-            sourceDelegate.zoomAnimatedTransitioningSourceDidEnd()
-            destinationDelegate.zoomAnimatedTransitioningDestinationDidEnd()
+            sourceDelegate.zoomAnimatedTransitioningSourceImageView().isHidden = false
+            destinationDelegate.zoomAnimatedTransitioningDestinationImageView().isHidden = false
             
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }

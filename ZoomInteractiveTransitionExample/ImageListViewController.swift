@@ -35,12 +35,4 @@ extension ImageListViewController: ZoomAnimatedTransitioningSourceDelegate {
         
     }
     
-    func zoomAnimatedTransitioningSourceWillBegin() {
-        transitioningImageView?.isHidden = true
-    }
-    
-    func zoomAnimatedTransitioningSourceDidEnd() {
-        transitioningImageView?.isHidden = false
-    }
-    
 }
