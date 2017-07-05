@@ -11,8 +11,6 @@ import UIKit
 class ImageViewController: UIViewController {
     
     var image: UIImage?
-//    let zoomInteractiveTransition = ZoomInteractiveTransition()
-//    var context: UIViewControllerContextTransitioning?
     let zoomAnimatedInteractiveTransition = ZoomAnimatedInteractiveTransition()
     
     @IBOutlet weak var imageView: UIImageView! {
@@ -23,9 +21,7 @@ class ImageViewController: UIViewController {
     
     @IBOutlet var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer! {
         didSet {
-//            zoomInteractiveTransition.delegate = self
             screenEdgePanGestureRecognizer.delegate = self
-//            screenEdgePanGestureRecognizer.addTarget(zoomInteractiveTransition, action: #selector(zoomInteractiveTransition.handle(recognizer:)))
             screenEdgePanGestureRecognizer.addTarget(zoomAnimatedInteractiveTransition, action: #selector(zoomAnimatedInteractiveTransition.handle(gesture:)))
         }
     }
@@ -56,62 +52,6 @@ extension ImageViewController: UIGestureRecognizerDelegate {
     }
     
 }
-
-//extension ImageViewController: ZoomInteractiveTransitionDelegate {
-//    
-//    func zoomInteractiveTransitionBegan() {
-//        (navigationController as! NavigationController).zoomInteractiveTransition = zoomInteractiveTransition
-//        _ = navigationController?.popViewController(animated: true)
-//        (navigationController as! NavigationController).zoomInteractiveTransition = nil
-//        
-//        if let transitionCoordinator = transitionCoordinator, transitionCoordinator.initiallyInteractive {
-//            transitionCoordinator.notifyWhenInteractionChanges { [weak self] _ in
-//                if transitionCoordinator.isCancelled {
-//                    guard let context = self?.context else {
-//                        return
-//                    }
-//                    
-//                    guard let toVC = context.viewController(forKey: .to),
-//                        let fromVC = context.viewController(forKey: .from) else {
-//                        return
-//                    }
-//                    
-//                    guard let sourceDelegate = toVC as? ZoomAnimatedTransitioningSourceDelegate,
-//                        let destinationDelegate = fromVC as? ZoomAnimatedTransitioningDestinationDelegate,
-//                        let transitioningImageViewIndex = context.containerView.subviews.index(where: { $0 is UIImageView }) else {
-//                        return
-//                    }
-//                    
-//                    guard let sourceView = context.view(forKey: .to),
-//                        let destinationView = context.view(forKey: .from) else {
-//                        return
-//                    }
-//                    
-//                    let transitioningImageView = context.containerView.subviews[transitioningImageViewIndex]
-//                    
-//                    UIView.animate(
-//                        withDuration:  0.3,
-//                        delay: 0.0,
-//                        options: .curveEaseOut,
-//                        animations: {
-//                            sourceView.alpha = 1.0
-//                            destinationView.alpha = 0.0
-//                            transitioningImageView.frame = destinationDelegate.zoomAnimatedTransitioningDestinationImageViewFrame()
-//                            print("FUGA FUGA")
-//                        },
-//                        completion: { _ in
-//                            sourceView.alpha = 0.0
-//                            destinationView.alpha = 1.0
-//                            transitioningImageView.removeFromSuperview()
-//                            print("HOGE HOGE")
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
-//    
-//}
 
 extension ImageViewController: ZoomAnimatedTransitioningDestinationDelegate {
     

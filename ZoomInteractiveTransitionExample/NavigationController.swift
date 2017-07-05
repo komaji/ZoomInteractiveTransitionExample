@@ -10,7 +10,6 @@ import UIKit
 
 class NavigationController: UINavigationController {
     
-//    var zoomInteractiveTransition: ZoomInteractiveTransition?
     var zoomAnimatedInteractiveTransition: ZoomAnimatedInteractiveTransition?
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,10 +39,6 @@ extension NavigationController: UINavigationControllerDelegate {
         
         return nil
     }
-    
-//    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-//        return zoomInteractiveTransition
-//    }
     
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard let zoomAnimatedInteractiveTransition = zoomAnimatedInteractiveTransition else {
